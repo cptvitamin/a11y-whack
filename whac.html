@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Whac a Creeper, not a Steve</title>
+    <link rel="author" title="Mark Sadecki" href="mark@w3.org">
+    <script src="whac.js"></script>
+    <style>
+      body {
+        font-family: Verdana, sans;
+      }
+      h1, #game-board {
+        text-align: center;
+      }
+      article {
+        width: 90%;
+        margin: auto;
+      }
+      #instructions {
+        float: left;
+        width: 50%;
+      }
+      #game-board {
+        float: right;
+        width: 45%
+      }
+    </style>
+    <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv-printshiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <article role="main">
+      <h1>Whack a Creeper (not a Steve)</h1>
+      <section id="instructions" aria-label="Instructions">
+      <p>You can learn more about this game by reading the presentation <a href="index.html">Canvas Accessibility - Past, Present and Future</a> including <a href="index.html#19">full instructions for game play</a>.</p>
+      <p>It is <strong>IMPORTANT</strong> to note that as of 10 MAY 2014 this game will <strong>ONLY</strong> work in <a href="http://nightly.mozilla.org">Firefox Nightly</a> 31.0a1+ with <strongcanvas.focusrings.enabled</strong and <strongcanvas.hitregions.enabled</strong set to <strongtrue</strong. Please see the presentation for other <a href="index.html#32">caveats and warnings</a>.</p>
+      <!--<p>Like the analog <a href="https://en.wikipedia.org/wiki/Whac-A-Mole">Whac-A-Mole</a> game and its digital derivatives this game was based on, the player is required to "whac" a character with their keyboard or mouse upon its appearance on the game board.  Special considerations were taken to make this game equally challenging for people of all abilities, and resulted in a number of deviations from the original "Whac-A-Mole".  Most notably, there are two types of characters that may appear on the board TODO-->
+      </section>
+      <section id="game-board" aria-label="Game">
+      <canvas id="game" width="150" height="200">
+        <p id="status" tabindex="0" role="alert" aria-live="assertive">Start</p>
+        <p id="00"></p>
+        <p id="01"></p>
+        <p id="02"></p>
+        <p id="10"></p>
+        <p id="11"></p>
+        <p id="12"></p>
+        <p id="20"></p>
+        <p id="21"></p>
+        <p id="22"></p>
+        <p id="oob" tabindex="0">Out of Bounds!</p>
+      </canvas>
+      <p aria-live="polite">Score: <span id="score">0</span></p>
+      <section>
+  </article>
+  </body>
+</html>

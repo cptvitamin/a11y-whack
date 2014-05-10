@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Canvas Accessibility - Past, Present and Future</title>
+    <link rel="author" title="Mark Sadecki" href="mark@w3.org">
+    <meta name="keywords" content="canvas,focus,hitregion,hit,region,accessibility,game,w3c,cptvitamin,mark,sadecki,slideshow,presentation">
+    <meta name="description" content="Learn about the accessibility challenges of the HTML5 canvas element, and how authors can now create scriptable bitmap graphics for everyone.">
+    <style type="text/css">
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body {
+        font-family: 'Droid Serif';
+      }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: 400;
+        margin-bottom: 0;
+        color: #0659A6;
+      }
+      /*.remark-slide-content h1 { font-size: 3em; }
+      //.remark-slide-content h2 { font-size: 2em; }
+      .remark-slide-content h3 { font-size: 1.6em; }*/
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-code-line-highlighted     { background-color: #373832; }
+
+      /* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+      .left-column h2:last-of-type, .left-column h3:last-child {
+        color: #000;
+      }
+      .right-column {
+        width: 73%;
+        float: right;
+        padding-top: 0.5em;
+      }
+      .pull-left {
+        float: left;
+        width: 47%;
+      }
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+      .pull-right ~ p {
+        clear: both;
+      }
+      .pull-right h2, .pull-left h2 {
+        padding: 0;
+        margin: 0;
+      }
+
+      /* Custom styles */
+      body {
+        font-size: 210%;
+      }
+      .remark-slide-content {
+        padding: 1em 2em;
+      }
+      .remark-slide-content.title {
+        padding: 0.2em 1.2em;
+      }
+      #slide-title h1 {
+        color: #fff;
+        text-shadow: #000 2px 2px, #6A83BD 0 0 20px;
+      }
+      #slide-title a, #slide-title span.footnote {
+        color: #000;
+        text-shadow: #6A83BD 1px 1px 20px;
+      }
+      .title h1 {
+        font-size: 300%;
+      }
+      .left-center .left-column {
+        text-align: center;
+      }
+      .offscreen, #past-present-and-future {
+        position:absolute;
+        left:-10000px;
+        top:auto;
+        width:1px;
+        height:1px;
+        overflow:hidden;
+      }
+      .very-large { font-size: 180%; }
+      .small { font-size: 95%; }
+      .blue {
+        color: #0659A6;
+      }
+      .footnote {
+        font-style: italic;
+        font-size: 75%;
+        color: #0659A6;
+      }
+      a.noline {
+        text-decoration: none;
+      }
+      .remark-toolbar-timer {
+        display: none!important;
+      }
+      .remark-notes-area {
+        padding: 0.5em;
+      }
+      .remark-notes ul {
+        margin-left: -1.5em;
+        font-size: 0.3em;
+      }
+      li li {
+        font-size: 80%;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+name: title
+class: title
+background-image: url('ppf.jpg')
+
+# Canvas Accessibility
+
+## Past, Present and Future
+
+.footnote[Boston Accessibility Conference<br>10 MAY 2014<br>Mark Sadecki ([@cptvitamin](http://twitter.com/cptvitamin))<br>[http://j.mp/a11y-canvas](http://j.mp/a11y-canvas)]
+
+---
+name: joke
+class: very-large
+
+The past,<br>
+the present,<br>
+and the future<br>
+walked into a bar.
+
+It was tense.
+
+---
+
+# Agenda
+
+1. [Introductions](#intro)
+2. [Accessibility Challenges of HTML5 ```&ltcanvas&gt```](#challenges)
+3. [Past, Present *(and Future...)* Solutions](#challenges)
+4. [Designing an accessible game using HTML5 ```&lt;canvas&gt;```](#game)
+
+---
+name: intro
+
+# Introductions
+
+## Mark Sadecki ([@cptvitamin](http://twitter.com/cptvitamin))
+
+* World Wide Web Consortium (W3C)
+  * Web Accessibility Initiative (WAI)
+* Staff Contact
+  * HTML Accessibility Task Force
+  * Canvas Sub Group
+  * *Media Sub Group* <a href="#recruits" aria-describedby="recruits" aria-label="see footnote" class="noline">*</a>
+  * *Bug Triage* <a href="#recruits" aria-describedby="recruits" aria-label="see footnote" class="noline">*</a>
+
+<span id="recruits" class="blue footnote">* Looking for recruits (contact [mark@w3.org](mailto:mark@w3.org))</span>
+---
+class: title, center, middle
+name: challenges
+
+# ```&ltcanvas&gt```<br>Accessibility Challenges
+
+---
+# What is ```&lt;canvas&gt;```?
+
+.pull-left[
+## Canvas is:
+
+A 2D drawing API that includes drawing functions for rendering interactive bitmap images
+
+]
+.pull-right[
+## What is it Good For?
+
+* Graphs
+* Animations
+* Games
+* Image Manipulation
+]
+
+* Appeared in OS X in 2004
+* Appeared in WHAT WG spec in 2006
+
+???
+
+Whenever I hear the word image, my accessibility radar starts buzzing.  Add the words interactive and bitmap and I start to get really concerened.  There are inherent accessibility challenges with bitmap images and those challenges get magnified when you make them interactive and dynamic.
+
+---
+class: left-center
+
+.left-column[
+# Challenge #1
+
+]
+
+.right-column[
+
+## No content to interact with
+
+```html
+&ltcanvas id="magic"
+  width="350" height="196"&gt
+```
+.center[
+![Animated gif: Actor Shia LaBeouf wearing a sparkly unicorn shirt and wiggling his fingers independent while mouthing the word magic.](magic.gif)
+]
+
+```html
+&lt/canvas&gt
+```
+]
+
+---
+class: left-center
+
+.left-column[
+# Solution #1
+
+![Extreme Trustfall: Cartoon character falling backwards of the roof of a tall building](extreme-trust.png)
+]
+
+.right-column[
+
+## Fallback content
+
+```html
+&ltcanvas id="magic"
+  width="350" height="196"&gt
+  &lt;h1&gt;Magic trick&lt;/h1&gt;
+  &lt;ol&gt;
+    &lt;li&gt;Find a unicorn&lt;/li&gt;
+    &lt;li&gt;Coax it under
+        your coat tails&lt;/li&gt;
+    &lt;li&gt;Misdirect audience
+        (flash of smoke?
+        sneeze on first row?)&lt;/li&gt;
+    &lt;li&gt;Reveal unicorn&lt;/li&gt;
+  &lt;/ol&gt;
+&lt/canvas&gt
+```
+]
+
+---
+
+# Fallback Content
+
+* Solution has been around since 2010
+* Well supported by browsers and <span aria-label"Assistive technology" title="assistive technology">AT</span>
+* Solution was in HTML5, not in ```&lt;canvas&gt;```
+
+.pull-left[
+
+## Pros
+
+* Useful if author wants to provide a text alternative for canvas content
+
+]
+
+.pull-right[
+
+## Cons
+
+* Not programmatically linked with the ```&lt;canvas&gt;``` itself
+
+]
+
+???
+
+Fallback is just fine if you want to give screen reader users access to the raw data for a graph for instance, or a text equivalent for an image or bitmap text, but its going to come up short if your graphic is dynamic or interactive.
+
+---
+class: left-center
+
+.left-column[
+# Challenge #2
+]
+
+.right-column[
+
+## No association between pixels/paths and fallback elements
+
+* Anything drawn to ```&lt;canvas&gt;``` is just a bitmap/pixels
+* No programmatic relationship between those pixels and fallback elements
+* No way to inform AAPIs of the location of those pixels
+* No way to pass ```Events``` on the canvas to the associated fallback elements.
+
+]
+
+???
+
+So now we have this great concept of fallback content. But canvas was designed to be dynamic and interactive.
+
+* How can we map or associate pixels drawn to the canvas with those great fallback elements that we can now put between the canvas tags?
+* How can we pass events on the canvas to those elements?
+* How can we tell AAPIs what the location of those elements are on the screen?  We can't tell them their position behind the canvas, we have to tell them their position *on* the canvas on order to drive screen magnifiers to them.
+
+---
+class: left-center
+
+.left-column[
+# Solution #2
+]
+
+.right-column[
+
+## Hit Regions
+
+* Defines the 'hit region list'
+* ```addHitRegion(id, control)```
+  * Method for associating a current path with a fallback element
+* ```removeHitRegion(id)```
+  * Removes a hit region from the 'hit region list'
+* ```clearHitRegions()```
+  * Removes all hit regions from the 'hit region list'
+* Defines how MouseEvents are handled
+
+]
+
+???
+
+So we *re-defined* the concept of Hit Regions.  Hit Regions are regions on the canvas that can be *hit* or interacted with.  The name comes from the beginnings of GUIs where the OS was responsible for tracking where mouse events or hits were happening.  Hit Regions have actually been in the WHAT WG spec for quite sometime, but they they were removed from the W3C spec because not a single browser vendor was implementing the feature.  This usually indicates that the feature is overly complex, poorly designed, or both.
+
+Talk about Canvas Accessibility Sub Group and role of the Accessibility Task Force.
+
+---
+class: left-center
+
+.left-column[
+# Challenge #3
+
+![A square with cross hair indicators at the mid point of each side](focus.png)
+]
+
+.right-column[
+
+## No visual focus indicators
+
+* Focus indicators are crucial for anyone using a keyboard
+* No (supported) standard method for indicating focus in HTML5 ```&lt;canvas&gt;```
+* Without standard/easy method of doing so, authors are unlikely to roll their own.
+
+]
+
+???
+
+* no way for users to know what element will receive keyboard interaction
+* The canvas spec originally had ```drawSystemFocusRing()``` and ```drawCustomFocusRing()```.
+* No implementations.  Browser vendors said methods were poorly named and designed.
+* ```drawCustomFocusRing()``` was not even possible since browsers cannot query OS settings.
+
+---
+class: left-center
+
+.left-column[
+# Solution #3
+]
+
+.right-column[
+
+## ```drawFocusIfNeeded(element)```
+
+* New method with a new name
+* Draws a focus indicator around the current path if the fallback element associated with that path currently has focus.
+* Scrolls current path into view if path is off screen (not beyond bounds of canvas)
+* Informs Accessibility API of the location of the currently focused element.
+
+]
+
+???
+
+* Combines best features from both ```drawSystemFocusRing()``` and ```drawCustomFocusRing()```
+* Gives it a more appropriate name (since the focus follows the path, it can be literally any shape, not just a "ring")
+* Easy to include in each and every drawing method.
+
+---
+
+class: left-center
+
+.left-column[
+# Can I Use?
+
+10 MAY 2014
+
+]
+
+.right-column[
+## So present it could be *future*
+
+<img src="firefox-nightly.svg" alt="Logo: Firefox Nightly" style="float:right;">
+
+Currently only supported by [Firefox Nightly ](https://nightly.mozilla.org/) 31.0a1+ (2014-04-26) *with* experimental flags enabled:
+```
+canvas.focusrings.enabled       true
+canvas.hitregions.enabled       true
+```
+
+### Setting flags in Firefox
+
+.center[![Screenshot of Firefox Nightly browser address bar containing the words about and config, separated by a colon](about-config.png)]
+
+]
+
+???
+
+* https://nightly.mozilla.org/
+* I will try to keep this page up-to-date as support changes
+
+---
+class: title, center, middle
+name: game
+
+# Building an Accessible Game using HTML5 Canvas
+
+---
+
+# Challenges
+
+* I'm **NOT** a game designer
+* The game needs to use all of these new features...
+* ...that were implemented two weeks ago
+* The game needs to showcase the accessibility benefits of these new features
+* *there will be no googling for techniques or error messages*
+* I'll need to design/build/test in one week
+
+.center[.blue[**This will be no "[Call of Duty](https://en.wikipedia.org/wiki/Call_of_Duty)"**]]
+
+---
+
+# Whac-a-mole
+
+* Easy enough...
+* Could be modified to use new features to enhance accessibility
+
+---
+
+# Guiding Principles
+
+Game should be:
+
+* Useable by keyboard users
+* Useable by screen reader users
+* Useable by screen magnification users
+* Equally challenging for all
+
+---
+
+# Deviations from Whac-a-mole
+
+* There will be two characters rather than one
+  * One is bad and should be "Whacked" (+10 points)
+  * The other is good and should not be "Whacked" (-10 points)
+* Fixed number of opportunities to score (10)
+* We're not whacking moles here
+  * My daughter suggested characters from her favorite video game, [Minecraft](https://en.wikipedia.org/wiki/Minecraft)
+  * I agreed since they would be relatively easy to draw using ```&lt;canvas&gt;```
+  * We chose "[Creepers](http://minecraft.gamepedia.com/Creeper)" (*bad*) and "[Steve](http://minecraft.gamepedia.com/Steve)" (*good*)
+* Game will be called "Whac a creeper, not a Steve"
+
+---
+
+# Game play
+
+* Player moves focus to, and then activates Start button
+* Characters randomly appear on the board, pausing between each
+* Player either clicks or hits "Enter" key on Creepers to score 10 points
+* Game ends when 10 Creepers have appeared on the board
+
+---
+class: title, center, middle
+
+# Game mechanics
+
+---
+# The Board
+
+```html
+&lt;canvas id=&quot;game&quot; width=&quot;150&quot; height=&quot;200&quot;&gt;
+  &lt;div id=&quot;status&quot; tabindex=&quot;0&quot; aria-live=&quot;rude&quot;&gt;Start&lt;/div&gt;
+  &lt;div id=&quot;00&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;01&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;02&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;10&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;11&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;12&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;20&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;21&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;22&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;oob&quot; tabindex=&quot;0&quot;&gt;Out of Bounds!&lt;/div&gt;
+&lt;/canvas&gt;
+&lt;p aria-live=&quot;polite&quot;&gt;Score: &lt;span id=&quot;score&quot;&gt;0&lt;/span&gt;&lt;/p&gt;
+```
+
+---
+# Draw the character
+
+* Game starts
+* A random character is drawn in one of 9 grids
+* A transparent hit region is drawn over the character and associated with corresponding fallback element
+* That element is made focusable (tabindex=0)
+* That element's text content is updated with the name of that character
+* Focus is moved to a neutral location
+
+---
+# Drawing the character
+
+Drawing squares in ```&lt;canvas&gt;``` is easy
+
+```javascript
+ctx.beginPath();
+ctx.fillStyle = color;
+ctx.rect(x, y, 5, 5);
+ctx.fill();
+// color grid for creeper
+var creeper = [
+[&quot;#7D9C79&quot;, &quot;#008000&quot;, &quot;#348828&quot;, ... &quot;#366B36&quot;],
+[&quot;#599A4C&quot;, &quot;#7D9C79&quot;, &quot;#62A853&quot;, ... &quot;#789776&quot;],
+[&quot;#008000&quot;, &quot;#292929&quot;, &quot;#2B2B2B&quot;, ... &quot;#366B36&quot;],
+[&quot;#348828&quot;, &quot;#2D2D2D&quot;, &quot;#000000&quot;, ... &quot;#93939C&quot;],
+...
+[&quot;#789776&quot;, &quot;#7D9C79&quot;, &quot;#4A4A4A&quot;, ... &quot;#62A853&quot;],
+];
+```
+---
+# Steve!
+.center[
+<canvas id="steve" width="400" height="400">
+<p>A rendering of Steve from Minecraft.  Minecraft characters are composed of 3d grids of solid colored blocks, so Steve's face, shown here in 2d is an 8 x 8 grid of colored squares.</p>
+</canvas>
+]
+---
+# Player takes action (or not)
+
+* Player clicks on character *or*
+* Uses Tab key to move focus to that character and press the Enter key
+* If player is using a screenreader, the name of the character will be read aloud when focus is moved to it
+* Score is calculated and updated
+* If player does not take action, the game times out and the board is refreshed
+
+---
+class: title, center, middle
+
+# Accessibility
+
+---
+# Hit Regions
+
+* Each time a character is drawn on the grid, a transparent square is drawn over the character.
+* A Hit Region associates that square with the corresponding ```&lt;div&gt;```
+* Accessibility APIs are informed of the location of that region as if it were the location of the fallback element
+* The player's screen will move to that location if the player is using magnification software
+---
+# Hit Region Script
+
+```html
+// draw a button and assign a Hit Region to it
+function drawButton( text, id ) {
+  ctx.beginPath();
+  ctx.fillStyle = "green";
+  ctx.rect( 0, 0, 100, 30 );
+  ctx.fill();
+  ctx.addHitRegion(
+    { id: id,
+      control: document.getElementById(id)
+    });
+}
+```
+---
+# ```drawFocusIfNeeded(element)```
+
+Whever a focus change event occurs, the ```drawFocusIfNeeded()``` method is invoked and an indicator, consistent with the default focus indicator for the browser and operating system is drawn on the canvas.
+
+* Focus change events
+  * Mouse click on a Hit Region
+  * Tab press
+  * Clear grid/Reset board
+
+---
+# Draw Focus Script
+
+I called this function whenever I drew a path to the Canvas that was associated with a fallback element and I wanted to move focus to it.
+
+```javascript
+function drawFocus( elem ){
+  elem.focus();
+  ctx.drawFocusIfNeeded( elem );
+}
+```
+---
+class: small
+
+# Let's play!
+
+* This game only works in [Firefox Nightly ](https://nightly.mozilla.org/) 31.0a1+ *with* ```canvas.focusrings.enabled``` and ```canvas.hitregions.enabled``` set to **true**
+* It is currently short on features (Game Over, Play again, grid and speed adjustments, etc.)
+* Only limited testing with speech and magnification
+
+.pull-left[
+.center[
+## [Play Game](whac.html)
+
+.small[.blue[View presentation:<br>[http://j.mp/a11y-canvas](http://j.mp/a11y-canvas)]]
+]
+]
+
+.pull-right[
+.center[
+## [Github](blah.html)
+
+.small[.blue[Issues and Pull Requests<br>are welcome :) ]]
+]
+]
+    </textarea>
+    <!-- script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript"-->
+    <script src="remark-0.6.4.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+    </script>
+    <script>
+    window.addEventListener("load", function() {
+      // initialize the canvas and the context
+      var cnv = document.querySelector("#steve");
+      var ctx = cnv.getContext("2d");
+      // color grid for steve
+      var steve = [
+        ["#231607", "#1F160A", "#1F160A", "#231607", "#2A1D0C", "#231607", "#231607", "#1F160A"],
+        ["#1F160A", "#3D280E", "#231607", "#3D280E", "#1F160A", "#1F160A", "#2A1D0C", "#2A1D0C"],
+        ["#3D280E", "#98765A", "#AB7E65", "#BC8E78", "#AB7E65", "#AE725F", "#BC8E78", "#2A1D0C"],
+        ["#AB7E65", "#AB7E65", "#BC8E78", "#BC8E78", "#BC8E78", "#AE725F", "#98765A", "#BC8E78"],
+        ["#98765A", "#FFFFFF", "#4A397D", "#BC8E78", "#98765A", "#4A397D", "#FFFFFF", "#98765A"],
+        ["#BC8E78", "#BC8E78", "#AB7E65", "#6E4935", "#6E4935", "#AE725F", "#98765A", "#AE725F"],
+        ["#855440", "#8C5938", "#401E0C", "#864737", "#864737", "#401E0C", "#855440", "#7F5036"],
+        ["#59462E", "#59462E", "#401E0C", "#401E0C", "#401E0C", "#401E0C", "#7F5036", "#855440"],
+        ];
+        function drawSteve(){
+          var x = 0,
+              y = 0;
+          for (var i = 0; i <=7; i++){
+            for (var e = 0; e <=7; e++){
+              var color = steve[i][e];
+              ctx.beginPath();
+              ctx.fillStyle = color;
+              ctx.rect(x, y, 50, 50);
+              ctx.fill();
+              x = x + 50;
+            }
+            x = 0;
+            y = y + 50;
+          }
+        }
+        drawSteve();
+      });
+    </script>
+  </body>
+</html>
