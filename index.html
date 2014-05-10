@@ -96,6 +96,7 @@
       }
       .very-large { font-size: 180%; }
       .small { font-size: 95%; }
+      .very-small { font-size: 85%; }
       .blue {
         color: #0659A6;
       }
@@ -108,7 +109,7 @@
         text-decoration: none;
       }
       .remark-toolbar-timer {
-        display: none!important;
+        /*display: none!important;*/
       }
       .remark-notes-area {
         padding: 0.5em;
@@ -171,6 +172,7 @@ name: intro
   * *Bug Triage* <a href="#recruits" aria-describedby="recruits" aria-label="see footnote" class="noline">*</a>
 
 <span id="recruits" class="blue footnote">* Looking for recruits (contact [mark@w3.org](mailto:mark@w3.org))</span>
+
 ---
 class: title, center, middle
 name: challenges
@@ -197,10 +199,6 @@ A 2D drawing API that includes drawing functions for rendering interactive bitma
 
 * Appeared in OS X in 2004
 * Appeared in WHAT WG spec in 2006
-
-???
-
-Whenever I hear the word image, my accessibility radar starts buzzing.  Add the words interactive and bitmap and I start to get really concerened.  There are inherent accessibility challenges with bitmap images and those challenges get magnified when you make them interactive and dynamic.
 
 ---
 class: left-center
@@ -281,10 +279,6 @@ class: left-center
 
 ]
 
-???
-
-Fallback is just fine if you want to give screen reader users access to the raw data for a graph for instance, or a text equivalent for an image or bitmap text, but its going to come up short if your graphic is dynamic or interactive.
-
 ---
 class: left-center
 
@@ -302,14 +296,6 @@ class: left-center
 * No way to pass ```Events``` on the canvas to the associated fallback elements.
 
 ]
-
-???
-
-So now we have this great concept of fallback content. But canvas was designed to be dynamic and interactive.
-
-* How can we map or associate pixels drawn to the canvas with those great fallback elements that we can now put between the canvas tags?
-* How can we pass events on the canvas to those elements?
-* How can we tell AAPIs what the location of those elements are on the screen?  We can't tell them their position behind the canvas, we have to tell them their position *on* the canvas on order to drive screen magnifiers to them.
 
 ---
 class: left-center
@@ -333,12 +319,6 @@ class: left-center
 
 ]
 
-???
-
-So we *re-defined* the concept of Hit Regions.  Hit Regions are regions on the canvas that can be *hit* or interacted with.  The name comes from the beginnings of GUIs where the OS was responsible for tracking where mouse events or hits were happening.  Hit Regions have actually been in the WHAT WG spec for quite sometime, but they they were removed from the W3C spec because not a single browser vendor was implementing the feature.  This usually indicates that the feature is overly complex, poorly designed, or both.
-
-Talk about Canvas Accessibility Sub Group and role of the Accessibility Task Force.
-
 ---
 class: left-center
 
@@ -358,13 +338,6 @@ class: left-center
 
 ]
 
-???
-
-* no way for users to know what element will receive keyboard interaction
-* The canvas spec originally had ```drawSystemFocusRing()``` and ```drawCustomFocusRing()```.
-* No implementations.  Browser vendors said methods were poorly named and designed.
-* ```drawCustomFocusRing()``` was not even possible since browsers cannot query OS settings.
-
 ---
 class: left-center
 
@@ -382,12 +355,6 @@ class: left-center
 * Informs Accessibility API of the location of the currently focused element.
 
 ]
-
-???
-
-* Combines best features from both ```drawSystemFocusRing()``` and ```drawCustomFocusRing()```
-* Gives it a more appropriate name (since the focus follows the path, it can be literally any shape, not just a "ring")
-* Easy to include in each and every drawing method.
 
 ---
 
@@ -417,11 +384,6 @@ canvas.hitregions.enabled       true
 
 ]
 
-???
-
-* https://nightly.mozilla.org/
-* I will try to keep this page up-to-date as support changes
-
 ---
 class: title, center, middle
 name: game
@@ -443,13 +405,6 @@ name: game
 
 ---
 
-# Whac-a-mole
-
-* Easy enough...
-* Could be modified to use new features to enhance accessibility
-
----
-
 # Guiding Principles
 
 Game should be:
@@ -458,6 +413,14 @@ Game should be:
 * Useable by screen reader users
 * Useable by screen magnification users
 * Equally challenging for all
+
+---
+
+# Whac-a-mole
+
+* Easy enough...
+* Simple enough concept.
+* Should allow me to showcase new features and satisfy all my guiding principles
 
 ---
 
@@ -492,7 +455,7 @@ class: title, center, middle
 
 ```html
 &lt;canvas id=&quot;game&quot; width=&quot;150&quot; height=&quot;200&quot;&gt;
-  &lt;div id=&quot;status&quot; tabindex=&quot;0&quot; aria-live=&quot;rude&quot;&gt;Start&lt;/div&gt;
+  &lt;div id=&quot;status&quot; tabindex=&quot;0&quot; aria-live=&quot;aggressive&quot;&gt;Start&lt;/div&gt;
   &lt;div id=&quot;00&quot;&gt;&lt;/div&gt;
   &lt;div id=&quot;01&quot;&gt;&lt;/div&gt;
   &lt;div id=&quot;02&quot;&gt;&lt;/div&gt;
@@ -603,7 +566,7 @@ function drawFocus( elem ){
 }
 ```
 ---
-class: small
+class: very-small
 
 # Let's play!
 
@@ -621,9 +584,9 @@ class: small
 
 .pull-right[
 .center[
-## [Github](blah.html)
+## [Github](https://j.mp/a11y-whack)
 
-.small[.blue[Issues and Pull Requests<br>are welcome :) ]]
+.small[.blue[Issues and Pull Requests<br>are welcome:<br>[http://j.mp/a11y-whack](http://j.mp/a11y-whack)]]
 ]
 ]
     </textarea>
