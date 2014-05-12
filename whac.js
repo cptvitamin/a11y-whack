@@ -61,11 +61,11 @@ window.addEventListener("load", function() {
       draw( who, x, y );
       drawHitRegion( whos, x, y );
       updateText( status, "Go" );
-      setTimeout( clearGrid , 4000 ); // how long character stays on board
+      setTimeout( clearGrid , 1500 ); // how long character stays on board
       if ( creeperCount < 10 ) {
          updateGrid();
       }
-    }, 4000 ); // pause before game start and between each new character
+    }, 2000 ); // pause before game start and between each new character
   }
   // draws either creeper or steve
   function draw(who, x, y){
@@ -141,11 +141,13 @@ window.addEventListener("load", function() {
   }
   // process the event
   function processClick(region){
+    console.log(region);
     var e = "";
-    if ( region !== null ){
+    if ( region != null && region != ""){
       var elem = document.getElementById(region);
       // the nodeValue determines if it was a creeper or a steve
       e = elem.firstChild.nodeValue;
+    console.log(e);
       drawFocus(elem);     // draw a focus ring around the element
     }
     switch (e) {
@@ -219,14 +221,20 @@ window.addEventListener("load", function() {
   }
   // draw the start button and assign a Hit Region to it
   function drawButton( id, text ) {
+    var elem = document.getElementById(id);
+    // draw the button
     ctx.beginPath();
     ctx.fillStyle = "green";
     ctx.rect( (cnv.width/2)-50, 5, 100, 30 );
     ctx.fill();
-    ctx.addHitRegion({id: id, control: document.getElementById(id) });
     ctx.font = '22px Verdana';
     ctx.fillStyle = "white";
     var t = ctx.measureText( text );
     ctx.fillText( text, ( cnv.width / 2 ) - t.width / 2 , 28);
+    // draw the hit region
+    ctx.beginPath();
+    ctx.fillStyle = "rgba(255,255,255,0.0)";
+    ctx.rect( (cnv.width/2)-55, 0, 110, 40 )
+    ctx.addHitRegion({id: id, control: document.getElementById(id) });
   }
 });
