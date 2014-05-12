@@ -239,19 +239,18 @@ class: left-center
 ## Fallback content
 
 ```html
-&ltcanvas id="magic"
-  width="350" height="196"&gt
-  &lt;h1&gt;Magic trick&lt;/h1&gt;
+&lt;canvas id="magic"
+  width="350" height="196"&gt;
+  &lt;h1 id="make-magic"&gt;Making magic&lt;/h1&gt;
   &lt;ol&gt;
     &lt;li&gt;Find a unicorn&lt;/li&gt;
     &lt;li&gt;Coax it under
         your coat tails&lt;/li&gt;
     &lt;li&gt;Misdirect audience
-        (flash of smoke?
-        sneeze on first row?)&lt;/li&gt;
+        (flash of smoke?)&lt;/li&gt;
     &lt;li&gt;Reveal unicorn&lt;/li&gt;
   &lt;/ol&gt;
-&lt/canvas&gt
+&lt;/canvas&gt;
 ```
 ]
 
@@ -260,7 +259,7 @@ class: left-center
 # Fallback Content
 
 * Solution has been around since 2010
-* Well supported by browsers and <span aria-label"Assistive technology" title="assistive technology">AT</span>
+* Well supported by browsers and <span aria-label="Assistive technology" title="assistive technology">AT</span>
 * Solution was in HTML5, not in ```&lt;canvas&gt;```
 
 .pull-left[
@@ -333,8 +332,8 @@ class: left-center
 ## No visual focus indicators
 
 * Focus indicators are crucial for anyone using a keyboard
-* No (supported) standard method for indicating focus in HTML5 ```&lt;canvas&gt;```
-* Without standard/easy method of doing so, authors are unlikely to roll their own.
+* No (specified) standard method for indicating focus in HTML5 ```&lt;canvas&gt;```
+* Without standard/native method for doing so, authors are unlikely to roll their own.
 
 ]
 
@@ -370,9 +369,9 @@ class: left-center
 .right-column[
 ## So present it could be *future*
 
-<img src="firefox-nightly.svg" alt="Logo: Firefox Nightly" style="float:right;">
+<img src="firefox-nightly.svg" alt="Logo: Firefox Nightly" style="float:right;"/>
 
-Currently only supported by [Firefox Nightly ](https://nightly.mozilla.org/) 31.0a1+ (2014-04-26) *with* experimental flags enabled:
+Currently only supported by Firefox Nightly ([Win](http://w3.org/Talks/2014/0510-canvas-a11y/firefox-31.0a1.en-US.win32.zip), [Mac](http://w3.org/Talks/2014/0510-canvas-a11y/firefox-31.0a1.en-US.mac.dmg)) 31.0a1 (2014-04-26) *with* experimental flags enabled:
 ```
 canvas.focusrings.enabled       true
 canvas.hitregions.enabled       true
@@ -398,8 +397,7 @@ name: game
 * The game needs to use all of these new features...
 * ...that were implemented two weeks ago
 * The game needs to showcase the accessibility benefits of these new features
-* *there will be no googling for techniques or error messages*
-* I'll need to design/build/test in one week
+* I only have one week to design/build/test (in free time)
 
 .center[.blue[**This will be no "[Call of Duty](https://en.wikipedia.org/wiki/Call_of_Duty)"**]]
 
@@ -418,8 +416,8 @@ Game should be:
 
 # Whac-a-mole
 
-* Easy enough...
-* Simple enough concept.
+* Easy enough
+* Simple concept
 * Should allow me to showcase new features and satisfy all my guiding principles
 
 ---
@@ -455,17 +453,17 @@ class: title, center, middle
 
 ```html
 &lt;canvas id=&quot;game&quot; width=&quot;150&quot; height=&quot;200&quot;&gt;
-  &lt;div id=&quot;status&quot; tabindex=&quot;0&quot; aria-live=&quot;aggressive&quot;&gt;Start&lt;/div&gt;
-  &lt;div id=&quot;00&quot;&gt;&lt;/div&gt;
-  &lt;div id=&quot;01&quot;&gt;&lt;/div&gt;
-  &lt;div id=&quot;02&quot;&gt;&lt;/div&gt;
-  &lt;div id=&quot;10&quot;&gt;&lt;/div&gt;
-  &lt;div id=&quot;11&quot;&gt;&lt;/div&gt;
-  &lt;div id=&quot;12&quot;&gt;&lt;/div&gt;
-  &lt;div id=&quot;20&quot;&gt;&lt;/div&gt;
-  &lt;div id=&quot;21&quot;&gt;&lt;/div&gt;
-  &lt;div id=&quot;22&quot;&gt;&lt;/div&gt;
-  &lt;div id=&quot;oob&quot; tabindex=&quot;0&quot;&gt;Out of Bounds!&lt;/div&gt;
+  &lt;p id=&quot;status&quot; tabindex=&quot;0&quot; aria-live=&quot;aggressive&quot;&gt;Start&lt;/p&gt;
+  &lt;p id=&quot;00&quot;&gt;&lt;/p&gt;
+  &lt;p id=&quot;01&quot;&gt;&lt;/p&gt;
+  &lt;p id=&quot;02&quot;&gt;&lt;/p&gt;
+  &lt;p id=&quot;10&quot;&gt;&lt;/p&gt;
+  &lt;p id=&quot;11&quot;&gt;&lt;/p&gt;
+  &lt;p id=&quot;12&quot;&gt;&lt;/p&gt;
+  &lt;p id=&quot;20&quot;&gt;&lt;/p&gt;
+  &lt;p id=&quot;21&quot;&gt;&lt;/p&gt;
+  &lt;p id=&quot;22&quot;&gt;&lt;/p&gt;
+  &lt;p id=&quot;oob&quot; tabindex=&quot;0&quot;&gt;Out of Bounds!&lt;/p&gt;
 &lt;/canvas&gt;
 &lt;p aria-live=&quot;polite&quot;&gt;Score: &lt;span id=&quot;score&quot;&gt;0&lt;/span&gt;&lt;/p&gt;
 ```
@@ -533,7 +531,7 @@ class: title, center, middle
 
 ```html
 // draw a button and assign a Hit Region to it
-function drawButton( text, id ) {
+function drawButton( id ) {
   ctx.beginPath();
   ctx.fillStyle = "green";
   ctx.rect( 0, 0, 100, 30 );
@@ -547,7 +545,7 @@ function drawButton( text, id ) {
 ---
 # ```drawFocusIfNeeded(element)```
 
-Whever a focus change event occurs, the ```drawFocusIfNeeded()``` method is invoked and an indicator, consistent with the default focus indicator for the browser and operating system is drawn on the canvas.
+Whenever a focus change event occurs, the ```drawFocusIfNeeded()``` method is invoked and an indicator, consistent with the default focus indicator for the browser and operating system is drawn on the canvas.
 
 * Focus change events
   * Mouse click on a Hit Region
@@ -570,7 +568,7 @@ class: very-small
 
 # Let's play!
 
-* This game only works in [Firefox Nightly ](https://nightly.mozilla.org/) 31.0a1+ *with* ```canvas.focusrings.enabled``` and ```canvas.hitregions.enabled``` set to **true**
+* This game only works in Firefox Nightly ([Win](http://w3.org/Talks/2014/0510-canvas-a11y/firefox-31.0a1.en-US.win32.zip), [Mac](http://w3.org/Talks/2014/0510-canvas-a11y/firefox-31.0a1.en-US.mac.dmg)) 31.0a1 *with* ```canvas.focusrings.enabled``` and ```canvas.hitregions.enabled``` set to **true**
 * It is currently short on features (Game Over, Play again, grid and speed adjustments, etc.)
 * Only limited testing with speech and magnification
 
